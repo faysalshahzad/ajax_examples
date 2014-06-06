@@ -29,13 +29,14 @@
 	button {
 		height:30px;
 		width: 100px;
+		margin-bottom:20px;
 	}
 	
     </style>
     
     <script type="text/javascript">
     	
-    	$(document).ready(function(){
+    	$(document).ready(function() {
     		$.ajaxSetup({cache:false});
     		
     		var wait_circle = "<img src='img/load.gif' alt='loading...' />" ;
@@ -43,6 +44,27 @@
 			$("#controls .load").click(function(){ 
 				$("#response").html(wait_circle).load("from.html",null, function(responseText){alert("Here comes the response: \n" +responseText);});		
 			});    	
+    	
+    	
+    		var jsonURL = "https://maps.googleapis.com/maps/api/geocode/json";
+    		
+    		// ajax using getJSON
+    		$("#getJSONForm").submit(function() {			
+				var q = $("#q").val();
+			
+				if(q=='') {
+					$("#q").focus();
+				}
+				else {
+					$("#response").html(wait_circle);
+					
+					$.getJSON(jsonURL, {address:q}, function(response) { 
+						var code = response["results"][0].address_components[0].short_name;				
+						$("#response").html(code);
+					});
+				}
+				return false;
+			});
     	});
     	
     	
@@ -56,6 +78,12 @@
         </div>
         <div id="controls">
         	<button class="load" name="load"> load</button>
+        	<div class="getjsonbox">
+        		<form id="getJSONForm">
+        			<input type="text" id="q" value="world"/>
+        			<input type="submit" value="Country Code" id="getJSONInput"/>
+        		</form>
+        	</div>
         </div>
     	
     </body>
