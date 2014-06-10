@@ -32,6 +32,10 @@
 		margin-bottom:20px;
 	}
 	
+	#loadScript {
+		margin-top: 20px;
+	}
+	
     </style>
     
     <script type="text/javascript">
@@ -65,6 +69,20 @@
 				}
 				return false;
 			});
+			
+			
+			//loading script from another remote file
+			
+			var scriptUrl = "ajax/script.php";
+			
+			$("#loadScript").click( function() {
+				$("#response").html(wait_circle);
+				$.getScript(scriptUrl, function () {
+					$("#response").html("<p>alert will be loaded from another script file.</p>");				
+				});
+			
+			});
+			
     	});
     	
     	
@@ -81,7 +99,8 @@
         	<div class="getjsonbox">
         		<form id="getJSONForm">
         			<input type="text" id="q" value="world"/>
-        			<input type="submit" value="Country Code" id="getJSONInput"/>
+        			<input type="submit" value="Country Code" id="getJSONInput"/> <br>
+        			<input type="button" value="Load Script" id="loadScript"/>
         		</form>
         	</div>
         </div>
