@@ -15,7 +15,7 @@
 	
 	div#response {
 		width: 600px;
-		height: 200px;
+		min-height: 100%;
 		padding: 10px;
 		border: 2px solid blue;
 		float: left;
@@ -32,7 +32,9 @@
 		margin-bottom:20px;
 	}
 	
-	#loadScript {
+	#loadScript,
+	#ajax_with_get,
+	#ajax_with_post {
 		margin-top: 20px;
 	}
 	
@@ -52,7 +54,7 @@
     	
     		var jsonURL = "https://maps.googleapis.com/maps/api/geocode/json";
     		
-    		// ajax using getJSON
+    		// ajax using getJSON *only GET is possible not POST*
     		$("#getJSONForm").submit(function() {			
 				var q = $("#q").val();
 			
@@ -71,7 +73,7 @@
 			});
 			
 			
-			//loading script from another remote file
+			//loading script from another remote file *No GET no POST possible*
 			
 			var scriptUrl = "ajax/script.php";
 			
@@ -83,6 +85,37 @@
 			
 			});
 			
+    		
+    		// ajax using $.get() method * response in many formats *
+    		
+    		loadUrl = "ajax/load.php";
+    		$("#ajax_with_get").click(function() {
+    			$("#response").html(wait_circle);
+    			
+    			$.get(
+    				loadUrl,
+    				{lang:"php", version: "5"}, 
+    				function(reply) { 
+    						$("#response").html(reply);
+    				},
+    				"html");
+    		});
+    	
+    		// ajax using $.post() method * response in many formats *
+    		
+    		loadPostUrl = "ajax/sample.php";
+    		$("#ajax_with_post").click(function() {
+    			$("#response").html(wait_circle);
+    			
+    			$.get(
+    				loadPostUrl,
+    				{lang:"php", version: "5"}, 
+    				function(reply) { 
+    						$("#response").html(reply);
+    				},
+    				"text");
+    		});
+    	
     	});
     	
     	
@@ -100,7 +133,9 @@
         		<form id="getJSONForm">
         			<input type="text" id="q" value="world"/>
         			<input type="submit" value="Country Code" id="getJSONInput"/> <br>
-        			<input type="button" value="Load Script" id="loadScript"/>
+        			<input type="button" value="Load Script" id="loadScript"/>	<br>        			
+        			<input type="button" value="$.get()" id="ajax_with_get"/> <br>
+        			<input type="button" value="$.post()" id="ajax_with_post"/>
         		</form>
         	</div>
         </div>
