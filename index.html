@@ -136,8 +136,8 @@
 					async:false,
 					cache: false
 				});
-				 e.preventDefault();
-				 return 1; // for asynchrnous testing, will be executed immediately if async is true
+				
+				 return false; // for asynchrnous testing, will be executed immediately if async is true, we can also use e.preventDefault; e.stopPropagation; instead of return false;
         		// e.unbind();	
 			});
     	});
