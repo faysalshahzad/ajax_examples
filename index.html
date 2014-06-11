@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Ajax example</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    </head>
+    
     <style type="text/css">
     	
     body {
@@ -34,7 +34,8 @@
 	
 	#loadScript,
 	#ajax_with_get,
-	#ajax_with_post {
+	#ajax_with_post,
+	#ajax_with_ajax {
 		margin-top: 20px;
 	}
 	
@@ -78,7 +79,7 @@
 			var scriptUrl = "ajax/script.php";
 			
 			$("#loadScript").click( function() {
-				$("#response").html(wait_circle);
+			$("#response").html(wait_circle);
 				$.getScript(scriptUrl, function () {
 					$("#response").html("<p>alert will be loaded from another script file.</p>");				
 				});
@@ -86,7 +87,7 @@
 			});
 			
     		
-    		// ajax using $.get() method * response in many formats *
+    		// ajax using $.get() function * response in many formats *
     		
     		loadUrl = "ajax/load.php";
     		$("#ajax_with_get").click(function() {
@@ -101,7 +102,7 @@
     				"html");
     		});
     	
-    		// ajax using $.post() method * response in many formats *
+    		// ajax using $.post() function * response in many formats *
     		
     		loadPostUrl = "ajax/sample.php";
     		$("#ajax_with_post").click(function() {
@@ -116,11 +117,34 @@
     				"text");
     		});
     	
+    		/*ajax using $.ajax() function to be used mostly, necessary when error occurs 
+    		 * Let us calculate GCD (greatest common diviser) of two numbers on server side)
+    		 * */ 
+    		
+    		loadGCDUrl = "ajax/gcd.php";
+    		
+    		$("#GCDForm").submit(function(e) {
+				$("#response").html(wait_circle);
+				$.ajax({
+					url:loadGCDUrl,
+					type: "GET",
+					data : { first: number1.value, second: number2.value },
+					success: function(result) {
+						$("#response").html(result);
+					},
+					error: function() {alert("Unfortunately an error occured");},
+					async:false,
+					cache: false
+				});
+				 e.preventDefault();
+				 return 1; // for asynchrnous testing, will be executed immediately if async is true
+        		// e.unbind();	
+			});
     	});
     	
     	
     </script>
-    
+    </head>
     <body>
         <h1>This page has ajax examples</h1>
         <div id="response">
@@ -133,10 +157,16 @@
         		<form id="getJSONForm">
         			<input type="text" id="q" value="world"/>
         			<input type="submit" value="Country Code" id="getJSONInput"/> <br>
+        		</form>
         			<input type="button" value="Load Script" id="loadScript"/>	<br>        			
         			<input type="button" value="$.get()" id="ajax_with_get"/> <br>
-        			<input type="button" value="$.post()" id="ajax_with_post"/>
-        		</form>
+        			<input type="button" value="$.post()" id="ajax_with_post"/> <br>
+        			
+        		<form id="GCDForm" method="get" action="">	
+        			<input type="text" name="number1" id="number1"/>
+        			<input type="text" name="number2" id="number2"/>
+        			<input type="submit" value="calculate GCD" id="ajax_with_ajax"/>
+        		</form>	
         	</div>
         </div>
     	
